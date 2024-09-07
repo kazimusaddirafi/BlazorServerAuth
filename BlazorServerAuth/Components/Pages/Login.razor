@@ -1,0 +1,47 @@
+﻿@page "/login";
+@using BlazorServerAuth.Authentication
+@using Microsoft.AspNetCore.Components.Authorization
+@inject AuthenticationStateProvider authStateProvider
+@inject NavigationManager NavigationManager
+
+
+<form>
+    <div class="mb-3">
+        <label for="exampleInputEmail1" class="form-label">UserId</label>
+        <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" @bind="model.UserId" >
+      
+    </div>
+    <div class="mb-3">
+        <label for="exampleInputPassword1" class="form-label" @bind="model.Password">Password</label>
+        <input type="password" class="form-control" id="exampleInputPassword1">
+    </div>
+    
+    <button @onclick="Authenticate" type="button" class="btn btn-primary">Submit</button>
+</form>
+
+@code {
+    private class LoginModel
+    {
+        public string UserId { get; set; }
+        public string Password { get; set; }
+    }
+
+    private LoginModel model = new LoginModel();
+
+    private async Task Authenticate()
+    {
+        // if (model.UserId == null)
+        // {
+        //     await Js.InvokeVoidAsync("alert", "UserId Not Fpund");
+        //     return;
+        // }
+        var customAuthStateProvider = (CustomAuthenticationStateProvider)authStateProvider;
+        await customAuthStateProvider.UpdateAuthenticationState(new UserSession
+        {
+            UserId= model.UserId ,
+            Token="jshfksfkjsfksfhkj"
+        });
+        NavigationManager.NavigateTo("/",true);
+    }
+
+}
